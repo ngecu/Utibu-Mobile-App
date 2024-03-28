@@ -1,0 +1,33 @@
+### CREATE CUSTOMER
+POST http://localhost:4400/customer
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "123456789",
+    "address": "123 Main Street"
+}
+
+### GET ALL CUSTOMERS
+GET http://localhost:4400/customer/all
+Content-Type: application/json
+
+### GET CUSTOMER BY ID
+GET http://localhost:4400/customer/123456789
+Content-Type: application/json
+
+### UPDATE CUSTOMER
+PUT http://localhost:4400/customer/update/123456789
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "987654321",
+    "address": "456 Oak Avenue"
+}
+
+### DELETE CUSTOMER
+DELETE http://localhost:4400/customer/delete/123456789
+Content-Type: application/json
