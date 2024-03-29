@@ -18,7 +18,7 @@ app.use(cors());
 app.use(json());
 
 // Use your routes here
-app.use('/customers', customerRoutes);
+app.use('/customer', customerRoutes);
 app.use('/invoices', invoiceRoutes);
 app.use('/medications', medicationRoutes);
 app.use('/orders', orderRoutes);

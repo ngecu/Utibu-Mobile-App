@@ -79,7 +79,7 @@ export const getAllMedications = async (req, res) => {
 };
 
 // Controller for fetching a specific medication
-export const getMedication = async (req, res) => {
+export const getMedicationByID = async (req, res) => {
   try {
     const { medicationID } = req.params;
 

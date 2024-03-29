@@ -1,18 +1,18 @@
 import express from 'express';
-import { createOrderDetail, getOrderDetailByID, updateOrderDetail, deleteOrderDetail } from '../controllers/orderDetailsController';
+import { createOrderDetails, getOrderDetailsByOrderID } from '../controller/orderDetailsController.js';
 
 const router = express.Router();
 
 // Create a new order detail
-router.post('/', createOrderDetail);
+router.post('/', createOrderDetails);
 
 // Get an order detail by ID
-router.get('/:orderDetailID', getOrderDetailByID);
+router.get('/:orderDetailID', getOrderDetailsByOrderID);
 
-// Update an order detail
-router.put('/:orderDetailID', updateOrderDetail);
+// // Update an order detail
+// router.put('/:orderDetailID', updateOrderDetail);
 
-// Delete an order detail
-router.delete('/:orderDetailID', deleteOrderDetail);
+// // Delete an order detail
+// router.delete('/:orderDetailID', deleteOrderDetail);
 
 export default router;

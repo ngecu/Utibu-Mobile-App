@@ -1,37 +1,33 @@
 import dbHelper from '../dbhelpers/dbhelpers.js';
 import { v4 } from 'uuid';
-
+import jwt from 'jsonwebtoken'
+import { loginCustomerSchema, registerCustomerSchema } from '../validators/validators.js';
+import bcrypt from 'bcrypt'
 // Controller for registering a new customer
 export const registerCustomer = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, address, username, password } = req.body;
-
-    // Check if the username or email is already registered
-    const existingCustomer = await dbHelper.query('SELECT * FROM Customers WHERE Username = @username OR Email = @email', {
-      username,
-      email,
-    });
-
-    if (existingCustomer.recordset.length > 0) {
-      return res.status(400).json({
-        message: 'Username or email already exists',
-      });
-    }
+    console.log("req body ",req.body);
+    const { FirstName, LastName, Email, Phone, Address, Username, Password } = req.body;
+    let {error} = registerCustomerSchema.validate(req.body)
+    if(error){
+      return res.status(404).json({error: error.details[0].message})
+  }
+    
 
     // Generate a unique customer ID
     const customerID = v4();
-
+    const hashedPwd = await bcrypt.hash(Password, 5)
     // Execute SQL query to register the customer
-    await dbHelper.execute('INSERT INTO Customers (CustomerID, FirstName, LastName, Email, Phone, Address, Username, Password) VALUES (@customerID, @firstName, @lastName, @email, @phone, @address, @username, @password)',
+    await dbHelper.execute('registerCustomer',
       {
         customerID,
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
-        username,
-        password,
+        FirstName,
+        LastName,
+        Email,
+        Phone,
+        Address,
+        Username,
+        Password:hashedPwd,
       });
 
     // Send response
@@ -41,35 +37,59 @@ export const registerCustomer = async (req, res) => {
     });
   } catch (error) {
     console.error('Error:', error);
-    return res.status(500).json({
-      error: 'Internal Server Error',
-    });
+    if(error.originalError.info.message){
+      return res.status(500).json({
+        error: error.originalError.info.message,
+      });
+    }
+    else{
+      return res.status(500).json({
+        error:error
+      })
+    }
+   
   }
 };
 
 // Controller for logging in a customer
 export const loginCustomer = async (req, res) => {
+  console.log("req.body ",req.body);
   try {
-    const { username, password } = req.body;
+    
+    const { Email, Password } = req.body;
+
+    const {error} = loginCustomerSchema.validate(req.body)
+    if(error){
+      return res.status(404).json({error: error.details[0].message})
+  }
+
 
     // Execute SQL query to check customer credentials
-    const customer = await dbHelper.query('SELECT * FROM Customers WHERE Username = @username AND Password = @password', {
-      username,
-      password,
-    });
-
-    // Check if customer exists and credentials are correct
-    if (customer.recordset.length === 0) {
-      return res.status(401).json({
-        message: 'Invalid username or password',
+    let customer =  await dbHelper.execute('loginCustomer',
+      {
+        Email,
+        Password,
       });
-    }
+      const  existingCustomer = customer.recordset[0]
+      console.log(existingCustomer);
+      console.log(Password);
 
-    // Send response
-    return res.status(200).json({
-      message: 'Customer logged in successfully',
-      customer: customer.recordset[0],
-    });
+
+      if(customer.recordset[0]?.Email  == Email){
+  
+      const token = jwt.sign(existingCustomer, process.env.SECRET, {
+          expiresIn: '24h'
+      }) 
+
+      return res.status(200).json({
+          message: "Logged in successfully", token,existingCustomer
+      })
+
+      }
+      else{
+        
+      }
+    
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({

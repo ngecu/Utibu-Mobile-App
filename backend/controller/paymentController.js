@@ -50,7 +50,7 @@ export const getAllPayments = async (req, res) => {
 };
 
 // Controller for fetching a specific payment by its ID
-export const getPayment = async (req, res) => {
+export const getPaymentByID = async (req, res) => {
   try {
     const { paymentID } = req.params;
 

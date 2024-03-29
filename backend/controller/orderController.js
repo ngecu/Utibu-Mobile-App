@@ -75,7 +75,7 @@ export const getAllOrders = async (req, res) => {
 };
 
 // Controller for fetching a specific order by its ID
-export const getOrder = async (req, res) => {
+export const getOrderByID = async (req, res) => {
   try {
     const { orderID } = req.params;
 
@@ -102,5 +102,3 @@ export const getOrder = async (req, res) => {
     });
   }
 };
-
-// Additional controllers for order-related functionalities

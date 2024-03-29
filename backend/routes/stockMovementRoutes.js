@@ -1,5 +1,5 @@
 import express from 'express';
-import { recordStockMovement, getStockMovementsByMedicationID } from '../controllers/stockMovementController';
+import { recordStockMovement, getStockMovementsByMedicationID } from '../controller/stockMovementController.js';
 
 const router = express.Router();
 

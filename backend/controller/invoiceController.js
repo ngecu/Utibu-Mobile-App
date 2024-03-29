@@ -59,7 +59,7 @@ export const updateInvoice = async (req, res) => {
 };
 
 // Controller for fetching an invoice
-export const getInvoice = async (req, res) => {
+export const getInvoiceByID = async (req, res) => {
   try {
     const { invoiceID } = req.params;
 
