@@ -60,6 +60,7 @@ export const loginCustomer = async (req, res) => {
 
     const {error} = loginCustomerSchema.validate(req.body)
     if(error){
+      console.log(error);
       return res.status(404).json({error: error.details[0].message})
   }
 
@@ -87,7 +88,9 @@ export const loginCustomer = async (req, res) => {
 
       }
       else{
-        
+        return res.status(401).json({
+          error: "Incorrect email or password"
+        });
       }
     
   } catch (error) {

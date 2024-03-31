@@ -1,8 +1,6 @@
 import express, { json } from 'express';
 import cors from 'cors';
-import http from 'http';
-import dbHelper from './dbhelpers/dbhelpers.js';
-
+import bodyParser from 'body-parser'
 // Import your route handlers here
 import customerRoutes from './routes/customerRoutes.js';
 import invoiceRoutes from './routes/invoiceRoutes.js';
@@ -13,9 +11,16 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import stockMovementRoutes from './routes/stockMovementRoutes.js';
 
 const app = express();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(json());
+
+
+app.get('/health',(req,res)=>{
+  console.log(req);
+  res.status(200).json({message:'Hello everyone .....I am happy'})
+})
 
 // Use your routes here
 app.use('/customer', customerRoutes);
