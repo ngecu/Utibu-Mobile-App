@@ -3,7 +3,7 @@ import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome
 import { View } from '@/components/Themed';
 import { ActivityIndicator, Avatar, Button, Card, MD2Colors, TextInput } from 'react-native-paper';
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link,Redirect, useRouter  } from 'expo-router';
 import useFetch from '@/hook/useFetch';
 
 const screenWidth = Dimensions.get('window').width;
@@ -12,14 +12,28 @@ const screenHeight = Dimensions.get('window').height;
 export default function LoginScreen() {
   const [Email, setEmail] = React.useState('');
   const [Password, setPassword] = React.useState('');
-  const { isLoading, error, refetch } = useFetch('customer/login', 'POST', {},{Email,Password})
-
+  const { isLoading, error, refetch,data } = useFetch('customer/login', 'POST', {},{Email,Password})
+  const router = useRouter();
   const showToast = () => {
-     refetch();
-     console.log("error from second ",error);
-     
-    ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+    // console.log(Password);
+    
+    refetch();
+    if (error) {
+      console.log("data is ",data);
+      
+      ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+    } else {
+      console.log("suucess");
+      // console.log(data);
+      console.log("error data is ",data);
+      
+      // Assuming 'data' contains the response from the server
+      ToastAndroid.show("Login successful", ToastAndroid.SHORT);
+
+      router.replace('/(tabs)/one');
+    }
   };
+  
 
   const handleLogin = () => {
     showToast();
